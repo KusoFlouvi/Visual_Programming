@@ -98,3 +98,17 @@ console.log(firstString('hello'));
 console.log(trimAndMaybeUpper('  hi  '));
 console.log(trimAndMaybeUpper('  hi  ', true));
 */
+
+function getFirstElement<T>(arr: T[]): T | undefined {
+    return arr[0];
+}
+
+//демонстрация работы на массиве чисел
+const numArray = [1, 2, 3];
+const strArray = ['a', 'b', 'c'];
+const emptyArray: number[] = [];
+
+//демонстрация работы на строках
+console.log(getFirstElement(numArray));
+console.log(getFirstElement(strArray));
+console.log(getFirstElement(emptyArray));
