@@ -112,3 +112,24 @@ const emptyArray: number[] = [];
 console.log(getFirstElement(numArray));
 console.log(getFirstElement(strArray));
 console.log(getFirstElement(emptyArray));
+
+interface HasId {
+    id: number;
+}
+
+function findById<T extends HasId>(items: T[], id: number): T | undefined {
+    return items.find(item => item.id === id);
+}
+
+interface Person extends HasId {
+    name: string;
+}
+
+const persons: Person[] = [
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' },
+    { id: 3, name: 'Charlie' }
+];
+
+console.log(findById(persons, 2));
+console.log(findById(persons, 5));
