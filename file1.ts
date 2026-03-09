@@ -78,3 +78,23 @@ console.log(getStatusColor('active'));
 console.log(getStatusColor('inactive')); 
 console.log(getStatusColor('new'));
 */
+
+type StringFormatter = (str: string, uppercase?: boolean) => string;
+
+//заглавная буква
+const firstString: StringFormatter = (str) => {
+    if (str.length === 0) return str;
+    return str[0].toUpperCase() + str.slice(1);
+};
+
+//обрезание пробелов
+const trimAndMaybeUpper: StringFormatter = (str, uppercase = false) => {
+    const trimmed = str.trim();
+    return uppercase ? trimmed.toUpperCase() : trimmed;
+};
+
+/*//демонстрация работы двух функций со строкой
+console.log(firstString('hello'));
+console.log(trimAndMaybeUpper('  hi  '));
+console.log(trimAndMaybeUpper('  hi  ', true));
+*/
