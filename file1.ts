@@ -88,9 +88,29 @@ const firstString: StringFormatter = (str) => {
 };
 
 //обрезание пробелов
-const trimAndMaybeUpper: StringFormatter = (str, uppercase = false) => {
-    const trimmed = str.trim();
-    return uppercase ? trimmed.toUpperCase() : trimmed;
+const trimAndMaybeUpper: StringFormatter = (str, uppercase = false): string => {
+  let start = 0;
+  let end = str.length - 1;
+
+  while (start <= end && str[start] === " ") {
+    start++;
+  }
+
+  while (end >= start && str[end] === " ") {
+    end--;
+  }
+
+  let result = "";
+
+  for (let i = start; i <= end; i++) {
+    result += str[i];
+  }
+
+  if (uppercase) {
+    result = result.toUpperCase();
+  }
+
+  return result;
 };
 
 /*//демонстрация работы двух функций со строкой
