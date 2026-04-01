@@ -5,7 +5,7 @@ interface User {
     isActive: boolean;
 }
 
-function createUser (id: number, name: string, email?: string, isActive: boolean = true) {
+export function createUser (id: number, name: string, email?: string, isActive: boolean = true) {
     return {id, name, email, isActive};
 }
 
@@ -24,7 +24,7 @@ interface Book {
     genre: 'fiction' | 'non-fiction';
 }
 
-function createBook(book: Book): Book {
+export function createBook(book: Book): Book {
     return book;
 }
 
@@ -47,10 +47,10 @@ console.log('Book 2:', book2);
 */
 
 
-function calculateArea(shape: 'circle', radius: number): number;
-function calculateArea(shape: 'square', side: number): number;
+export function calculateArea(shape: 'circle', radius: number): number;
+export function calculateArea(shape: 'square', side: number): number;
 
-function calculateArea(shape: 'circle' | 'square', param: number): number {
+export function calculateArea(shape: 'circle' | 'square', param: number): number {
     if (shape === 'circle') {
         return Math.PI * param ** 2;
     } else {
@@ -65,7 +65,7 @@ console.log(calculateArea('square', 3));
 
 type Status = 'active' | 'inactive' | 'new';
 
-function getStatusColor(status: Status): string {
+export function getStatusColor(status: Status): string {
     switch (status) {
         case 'active': return 'green';
         case 'inactive': return 'gray';
@@ -82,13 +82,13 @@ console.log(getStatusColor('new'));
 type StringFormatter = (str: string, uppercase?: boolean) => string;
 
 //заглавная буква
-const firstString: StringFormatter = (str) => {
+export const firstString: StringFormatter = (str) => {
     if (str.length === 0) return str;
     return str[0].toUpperCase() + str.slice(1);
 };
 
 //обрезание пробелов
-const trimAndMaybeUpper: StringFormatter = (str, uppercase = false): string => {
+export const trimAndMaybeUpper: StringFormatter = (str, uppercase = false): string => {
   let start = 0;
   let end = str.length - 1;
 
@@ -119,7 +119,7 @@ console.log(trimAndMaybeUpper('  hi  '));
 console.log(trimAndMaybeUpper('  hi  ', true));
 */
 
-function getFirstElement<T>(arr: T[]): T | undefined {
+export function getFirstElement<T>(arr: T[]): T | undefined {
     return arr[0];
 }
 
@@ -137,7 +137,7 @@ interface HasId {
     id: number;
 }
 
-function findById<T extends HasId>(items: T[], id: number): T | undefined {
+export function findById<T extends HasId>(items: T[], id: number): T | undefined {
     return items.find(item => item.id === id);
 }
 
