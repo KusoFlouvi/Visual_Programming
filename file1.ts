@@ -1,110 +1,109 @@
-interface User {
-    id: number;
-    name: string;
-    email?: string;
-    isActive: boolean;
+export interface User {
+  id: number;
+  name: string;
+  email?: string;
+  isActive: boolean;
 }
 
-export function createUser (id: number, name: string, email?: string, isActive: boolean = true) {
-    return {id, name, email, isActive};
+export function createUser(
+  id: number,
+  name: string,
+  email?: string,
+  isActive: boolean = true
+): User {
+  const user: User = {
+    id,
+    name,
+    isActive
+  };
+
+  if (email !== undefined) {
+    user.email = email;
+  }
+
+  return user;
 }
 
-/*//демонстрация работы функции
-const user1 = createUser(1, 'Игрок 1');
-console.log('User 1:', user1);
 
-const user2 = createUser(2, 'Игрок 2', 'gameworld23@gmail.com', false);
-console.log('User 2:', user2);
-*/
 
-interface Book {
-    title: string;
-    author: string;
-    year?: number;
-    genre: 'fiction' | 'non-fiction';
+export interface Book {
+  title: string;
+  author: string;
+  year?: number;
+  genre: "fiction" | "non-fiction";
 }
 
 export function createBook(book: Book): Book {
-    return book;
+  return book;
 }
 
-//демонстрация работы функции
-const book1 = createBook({
-    title: 'Преступление и наказание',
-    author: 'Достоевский',
-    genre: 'fiction'
-});
-console.log('Book 1:', book1);
-
-/*
-const book2 = createBook({
-    title: 'Краткая история времени',
-    author: 'Стивен Хокинг',
-    year: 1988,
-    genre: 'non-fiction'
-});
-console.log('Book 2:', book2);
-*/
 
 
-export function calculateArea(shape: 'circle', radius: number): number;
-export function calculateArea(shape: 'square', side: number): number;
+export function calculateArea(shape: "circle", radius: number): number;
+export function calculateArea(shape: "square", side: number): number;
 
-export function calculateArea(shape: 'circle' | 'square', param: number): number {
-    if (shape === 'circle') {
-        return Math.PI * param ** 2;
-    } else {
-        return param ** 2;
-    }
+export function calculateArea(shape: "circle" | "square", value: number): number {
+  if (shape === "circle") {
+    return Math.PI * value * value;
+  } else {
+    return value * value;
+  }
 }
 
-/*//демонстрация работы функции
-console.log(calculateArea('circle', 3));
-console.log(calculateArea('square', 3));
-*/
 
-type Status = 'active' | 'inactive' | 'new';
+
+type Status = "active" | "inactive" | "new";
 
 export function getStatusColor(status: Status): string {
-    switch (status) {
-        case 'active': return 'green';
-        case 'inactive': return 'gray';
-        case 'new': return 'yellow';
-    }
+  switch (status) {
+    case "active":
+      return "green";
+    case "inactive":
+      return "red";
+    case "new":
+      return "blue";
+  }
 }
 
-/*//демонстрация работы функции
-console.log(getStatusColor('active'));  
-console.log(getStatusColor('inactive')); 
-console.log(getStatusColor('new'));
-*/
 
-type StringFormatter = (str: string, uppercase?: boolean) => string;
 
-//заглавная буква
-export const firstString: StringFormatter = (str, uppercase = false) => {
-    if (str.length === 0) return str;
-    const result = str[0].toUpperCase() + str.slice(1);
-    return uppercase ? result : result;
+export type StringFormatter = (text: string, uppercase?: boolean) => string;
+
+export const capitalizeFirstLetter: StringFormatter = (
+  text,
+  uppercase = false
+): string => {
+  if (text.length === 0) return text;
+
+  let result = text.charAt(0).toUpperCase() + text.slice(1);
+
+  if (uppercase) {
+    result = result.toUpperCase();
+  }
+
+  return result;
 };
 
-//обрезание пробелов
-export const trimAndMaybeUpper: StringFormatter = (str, uppercase = false): string => {
-  let start = 0;
-  let end = str.length - 1;
+export const trim: StringFormatter = (
+  text,
+  uppercase = false
+): string => {
 
-  while (start <= end && str[start] === " ") {
+  let start = 0;
+  let end = text.length - 1;
+
+  while (start <= end && text[start] === " ") {
     start++;
   }
 
-  while (end >= start && str[end] === " ") {
+  while (end >= start && text[end] === " ") {
     end--;
   }
 
   let result = "";
 
   for (let i = start; i <= end; i++) {
-    result += str[i];
+    result += text[i];
   }
 
   if (uppercase) {
@@ -114,44 +113,29 @@ export const trimAndMaybeUpper: StringFormatter = (str, uppercase = false): stri
   return result;
 };
 
-/*//демонстрация работы двух функций со строкой
-console.log(firstString('hello'));
-console.log(firstString('hello', true));
-console.log(trimAndMaybeUpper('  hi  '));
-console.log(trimAndMaybeUpper('  hi  ', true));
-*/
+
+
 
 export function getFirstElement<T>(arr: T[]): T | undefined {
-    return arr[0];
+  if (arr.length === 0) {
+    return undefined;
+  }
+
+  return arr[0];
 }
 
-//демонстрация работы на массиве чисел
-const numArray = [1, 2, 3];
-const strArray = ['a', 'b', 'c'];
-const emptyArray: number[] = [];
 
-//демонстрация работы на строках
-console.log(getFirstElement(numArray));
-console.log(getFirstElement(strArray));
-console.log(getFirstElement(emptyArray));
 
-interface HasId {
-    id: number;
+export interface HasId {
+  id: number;
 }
 
 export function findById<T extends HasId>(items: T[], id: number): T | undefined {
-    return items.find(item => item.id === id);
+  for (const item of items) {
+    if (item.id === id) {
+      return item;
+    }
+  }
+
+  return undefined;
 }
-
-interface Person extends HasId {
-    name: string;
-}
-
-const persons: Person[] = [
-    { id: 1, name: 'Alice' },
-    { id: 2, name: 'Bob' },
-    { id: 3, name: 'Charlie' }
-];
-
-console.log(findById(persons, 2));
-console.log(findById(persons, 5));

@@ -1,7 +1,16 @@
-import { describe, it, expect } from 'vitest';
-import { createUser, createBook, calculateArea, getStatusColor, firstString, trimAndMaybeUpper, getFirstElement, findById } from './file1';
+import { describe, it, expect } from "vitest";
+import {
+  createUser,
+  createBook,
+  calculateArea,
+  getStatusColor,
+  capitalizeFirstLetter,
+  trim,
+  getFirstElement,
+  findById
+} from "./file1";
 
-describe("Tests for ..file1.ts", () => {
+describe("Tests for ../src/tasks.ts", () => {
     // createUser:  
     it("createUser: Создаю пользователя по умолчанию с isActive", () => {
       const user = createUser(1, "Test №1");
@@ -60,44 +69,44 @@ describe("Tests for ..file1.ts", () => {
 
     it("getStatusColor: Возвращает red для active", () => {
       const result = getStatusColor("inactive");
-      expect(result).toBe("gray");
+      expect(result).toBe("red");
     });
 
     it("getStatusColor: Возвращает new для new", () => {
       const result = getStatusColor("new");
-      expect(result).toBe("yellow");
+      expect(result).toBe("blue");
     });
 
 
-    // firstString
-    it("firstString: Проба делать первую букву заглавной", () => {
-      const result = firstString("test");
+    // StringFormatter
+    it("capitalizeFirstLetter: Проба делать первую букву заглавной", () => {
+      const result = capitalizeFirstLetter("test");
       expect(result).toBe("Test");
     });
 
-    it("firstString: Делаем всю строку заглавной", () => {
-      const result = firstString("test", true);
-      expect(result).toBe("Test");
+    it("capitalizeFirstLetter: Делаем всю строку заглавной", () => {
+      const result = capitalizeFirstLetter("test", true);
+      expect(result).toBe("TEST");
     });
 
-    it("firstString: Вроде как возрат пустой строки должен быть", () => {
-      const result = firstString("");
+    it("capitalizeFirstLetter: Вроде как возрат пустой строки должен быть", () => {
+      const result = capitalizeFirstLetter("");
       expect(result).toBe("");
     });
 
 
-    it("trimAndMaybeUpper: Убирает пробелы по краям без заглавия строки", () => {
-      const result = trimAndMaybeUpper("     trim     ");
+    it("trim: Убирает пробелы по краям без заглавия строки", () => {
+      const result = trim("     trim     ");
       expect(result).toBe("trim");
     });
 
-    it("trimAndMaybeUpper: Убирает пробелы и делает строку заглавной", () => {
-      const result = trimAndMaybeUpper("     trim     ", true);
+    it("trim: Убирает пробелы и делает строку заглавной", () => {
+      const result = trim("     trim     ", true);
       expect(result).toBe("TRIM");
     });
 
-    it("trimAndMaybeUpper: Если пробелов нема - остаётся прежней строка", () => {
-      const result = trimAndMaybeUpper("trim");
+    it("trim: Если пробелов нема - остаётся прежней строка", () => {
+      const result = trim("trim");
       expect(result).toBe("trim");
     });
 
