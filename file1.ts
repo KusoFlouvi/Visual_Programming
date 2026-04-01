@@ -82,9 +82,10 @@ console.log(getStatusColor('new'));
 type StringFormatter = (str: string, uppercase?: boolean) => string;
 
 //заглавная буква
-export const firstString: StringFormatter = (str) => {
+export const firstString: StringFormatter = (str, uppercase = false) => {
     if (str.length === 0) return str;
-    return str[0].toUpperCase() + str.slice(1);
+    const result = str[0].toUpperCase() + str.slice(1);
+    return uppercase ? result : result;
 };
 
 //обрезание пробелов
@@ -115,6 +116,7 @@ export const trimAndMaybeUpper: StringFormatter = (str, uppercase = false): stri
 
 /*//демонстрация работы двух функций со строкой
 console.log(firstString('hello'));
+console.log(firstString('hello', true));
 console.log(trimAndMaybeUpper('  hi  '));
 console.log(trimAndMaybeUpper('  hi  ', true));
 */
