@@ -1,3 +1,4 @@
+//Код и его экпорты
 export interface User {
   id: number;
   name: string;
