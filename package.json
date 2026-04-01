@@ -4,8 +4,7 @@
   "description": "Выполнение лабораторных по визуальному программированию 4 семестра",
   "main": "index.js",
   "scripts": {
-    "test": "vitest",
-    "test:coverage": "vitest --coverage"
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
