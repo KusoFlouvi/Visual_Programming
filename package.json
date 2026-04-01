@@ -1,0 +1,29 @@
+{
+  "name": "visual_programming",
+  "version": "1.0.0",
+  "description": "Выполнение лабораторных по визуальному программированию 4 семестра",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KusoFlouvi/Visual_Programming.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KusoFlouvi/Visual_Programming/issues"
+  },
+  "homepage": "https://github.com/KusoFlouvi/Visual_Programming#readme",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
+  }
+}
