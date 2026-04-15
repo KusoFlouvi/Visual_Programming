@@ -1,8 +1,7 @@
 //тесты функций
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, expectTypeOf } from 'vitest';
 import { query, where, sort, groupBy, having } from './file3';
 
-// Тип User из задания
 type User = {
   id: number;
   name: string;
@@ -11,7 +10,6 @@ type User = {
   city: string;
 };
 
-// Тестовые данные
 const users: User[] = [
   { id: 1, name: "John", surname: "Doe", age: 34, city: "NY" },
   { id: 2, name: "John", surname: "Doe", age: 33, city: "NY" },
@@ -138,5 +136,27 @@ describe('Дополнительные тесты', () => {
 
     const result = pipeline(users);
     expect(result).toHaveLength(0);
+  });
+});
+
+
+describe('Проверка порядка операций (статические типы)', () => {
+  test('правильный порядок: where, groupBy, having, sort', () => {
+    const pipeline = query<User>(
+      where("surname", "Doe"),
+      groupBy("city"),
+      having((group) => group.items.length > 0),
+      sort("key")
+    );
+    expectTypeOf(pipeline).toBeFunction();
+  });
+
+  test('неправильный порядок: having до groupBy', () => {
+    //ожидается ошибка компиляции
+    query<User>(
+      where("name", "John"),
+      having((group: any) => group.items.length > 1),
+      groupBy("city")
+    );
   });
 });
