@@ -1,26 +1,24 @@
 import React from 'react';
 
-interface AirPollutionProps {
-  data: any; // можно уточнить тип при необходимости
+interface Props {
+  data: any;
 }
 
-const aqiText: { [key: number]: string } = {
+const aqiText: Record<number, string> = {
   1: 'Хорошее',
   2: 'Умеренное',
-  3: 'Вредное для чувствительных групп',
+  3: 'Вредное для чувствительных',
   4: 'Вредное',
-  5: 'Очень вредное',
+  5: 'Очень вредное'
 };
 
-const AirPollution: React.FC<AirPollutionProps> = ({ data }) => {
-  if (!data || !data.list || data.list.length === 0) return null;
-
-  const aqi = data.list[0].main.aqi;
-
+const AirPollution: React.FC<Props> = ({ data }) => {
+  if (!data?.list?.length) return null;
+  const { main } = data.list[0];
   return (
-    <div style={{ marginTop: '20px', padding: '16px', background: '#f5f5f5', borderRadius: '8px' }}>
+    <div className="air-pollution">
       <h3>Качество воздуха</h3>
-      <p>Индекс AQI: {aqi} — {aqiText[aqi]}</p>
+      <p>AQI: {main.aqi} – {aqiText[main.aqi]}</p>
     </div>
   );
 };

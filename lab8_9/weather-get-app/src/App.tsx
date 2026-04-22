@@ -3,79 +3,61 @@ import SearchBar from './components/SearchBar';
 import CurrentWeather from './components/CurrentWeather';
 import ForecastList from './components/ForecastList';
 import AirPollution from './components/AirPollution';
-import { fetchForecast, fetchAirPollution } from './services/weather';
+import { getCoordinates, getForecast, getAirPollution } from './api';
 import './App.css';
 
 function App() {
-  const [lat, setLat] = useState<number | null>(null);
-  const [lon, setLon] = useState<number | null>(null);
-  const [cityName, setCityName] = useState<string>('');
+  const [city, setCity] = useState<string>('');
   const [forecast, setForecast] = useState<any>(null);
-  const [airPollution, setAirPollution] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [air, setAir] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [bgClass, setBgClass] = useState('default');
 
-  const fetchWeatherData = useCallback(async () => {
-    if (lat === null || lon === null) return;
+  const fetchWeather = useCallback(async (cityName: string) => {
     setLoading(true);
     setError('');
     try {
+      const coords = await getCoordinates(cityName);
       const [forecastData, airData] = await Promise.all([
-        fetchForecast(lat, lon),
-        fetchAirPollution(lat, lon),
+        getForecast(coords.lat, coords.lon),
+        getAirPollution(coords.lat, coords.lon)
       ]);
       setForecast(forecastData);
-      setAirPollution(airData);
-    } catch (err) {
-      setError('Ошибка при загрузке данных. Попробуйте позже.');
-      console.error(err);
+      setAir(airData);
+      const condition = forecastData.list[0].weather[0].main.toLowerCase();
+      setBgClass(condition);
+    } catch (err: any) {
+      setError(err.message || 'Ошибка');
     } finally {
       setLoading(false);
     }
-  }, [lat, lon]);
+  }, []);
 
-  // Первоначальная загрузка при изменении координат
   useEffect(() => {
-    fetchWeatherData();
-  }, [fetchWeatherData]);
-
-  // Обновление каждые 3 часа (10800000 мс)
-  useEffect(() => {
-    if (!lat || !lon) return;
-    const interval = setInterval(fetchWeatherData, 10800000);
+    if (!city) return;
+    fetchWeather(city);
+    const interval = setInterval(() => fetchWeather(city), 3 * 60 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [lat, lon, fetchWeatherData]);
-
-  const handleCitySelect = (newLat: number, newLon: number, name: string) => {
-    setLat(newLat);
-    setLon(newLon);
-    setCityName(name);
-  };
-
-  // Определение класса для фона в зависимости от погоды
-  const weatherCondition = forecast?.list[0]?.weather[0]?.main?.toLowerCase() || 'default';
-  const appClassName = `App ${weatherCondition}`;
+  }, [city, fetchWeather]);
 
   return (
-    <div className={appClassName}>
-      <header style={{ padding: '20px' }}>
-        <h1>Прогноз погоды</h1>
-        <SearchBar onCitySelect={handleCitySelect} />
-      </header>
-      <main style={{ padding: '0 20px' }}>
-        {loading && <div>Загрузка...</div>}
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-        {forecast && (
-          <>
-            <CurrentWeather data={forecast} />
-            <ForecastList forecastData={forecast.list} />
-            <AirPollution data={airPollution} />
-          </>
-        )}
-        {!forecast && !loading && !error && (
-          <div>Введите название города, чтобы увидеть прогноз</div>
-        )}
-      </main>
+    <div className={`App ${bgClass}`}>
+      <h1>Прогноз погоды</h1>
+      <SearchBar onSearch={setCity} />
+      {loading && <div className="loader">Загрузка...</div>}
+      {error && <div className="error">{error}</div>}
+      {forecast && (
+        <>
+          <CurrentWeather
+            data={forecast.list[0]}
+            cityName={forecast.city.name}
+            country={forecast.city.country}
+          />
+          <ForecastList list={forecast.list} />
+          <AirPollution data={air} />
+        </>
+      )}
     </div>
   );
 }

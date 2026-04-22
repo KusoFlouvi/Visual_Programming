@@ -1,66 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { fetchGeocoding, type GeocodingResult } from '../services/weather';
+import React, { useState } from 'react';
 
-interface SearchBarProps {
-  onCitySelect: (lat: number, lon: number, cityName: string) => void;
+interface Props {
+  onSearch: (city: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onCitySelect }) => {
-  const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<GeocodingResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+const SearchBar: React.FC<Props> = ({ onSearch }) => {
+  const [value, setValue] = useState('');
 
-  useEffect(() => {
-    if (query.length < 3) {
-      setSuggestions([]);
-      return;
-    }
-
-    const delayDebounce = setTimeout(async () => {
-      setIsLoading(true);
-      try {
-        const results = await fetchGeocoding(query);
-        setSuggestions(results);
-      } catch (error) {
-        console.error('Geocoding error:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 500);
-
-    return () => clearTimeout(delayDebounce);
-  }, [query]);
-
-  const handleSelect = (city: GeocodingResult) => {
-    onCitySelect(city.lat, city.lon, city.name);
-    setQuery('');
-    setSuggestions([]);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (value.trim()) onSearch(value.trim());
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <form className="search-bar" onSubmit={handleSubmit}>
       <input
         type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Введите название города..."
-        style={{ padding: '8px', width: '300px' }}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Введите город"
       />
-      {isLoading && <div>Загрузка...</div>}
-      {suggestions.length > 0 && (
-        <ul style={{ position: 'absolute', background: 'white', border: '1px solid #ccc', listStyle: 'none', padding: 0, margin: 0, width: '300px' }}>
-          {suggestions.map((city, index) => (
-            <li
-              key={index}
-              onClick={() => handleSelect(city)}
-              style={{ padding: '8px', cursor: 'pointer', borderBottom: '1px solid #eee' }}
-            >
-              {city.name}, {city.country} {city.state ? `(${city.state})` : ''}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+      <button type="submit">Поиск</button>
+    </form>
   );
 };
 
